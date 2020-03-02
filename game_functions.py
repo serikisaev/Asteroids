@@ -50,7 +50,6 @@ def update_screen(ai_settings, screen, ship, asteroids, bullets):
 
 def create_pound(ai_settings, screen, asteroids):
     """создание нескольких астероидов"""
-    for asteroid_number in range(6):
+    for asteroid_number in range(2):
         asteroid = Asteroid(ai_settings, screen)
         asteroids.add(asteroid)
-        print(asteroids)
