@@ -40,16 +40,16 @@ def check_events(ai_settings, screen, ship, bullets):
             check_keyup_events(event, ship)
 
 def update_screen(ai_settings, screen, ship, asteroids, bullets):
-    screen.fill(ai_settings.bg_color)
+
     for bullet in bullets.sprites():
         bullet.draw_bullet()
-    ship.blitme()
+        #ship.blitme()
     asteroids.draw(screen)
-    pygame.display.flip()
+
 
 
 def create_pound(ai_settings, screen, asteroids):
     """создание нескольких астероидов"""
-    for asteroid_number in range(2):
+    for asteroid_number in range(4):
         asteroid = Asteroid(ai_settings, screen)
         asteroids.add(asteroid)
