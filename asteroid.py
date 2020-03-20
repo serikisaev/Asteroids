@@ -1,36 +1,52 @@
-import pygame, math, random
+import math
+
+import random
+
+import pygame
+
+import base
+import common
+from vector import Vector
 from pygame.sprite import Sprite
 
-class Asteroid(Sprite):
-    def __init__(self, ai_settings, screen):
+class Asteroid(base.Thing):
+    WIDTH = 101
+    HEIGHT = 101
 
-        super(Asteroid, self).__init__()
-        self.screen = screen
-        self.ai_settings = ai_settings
+    def __init__(self):
 
-        self.original_image = pygame.image.load('images\large.bmp')
-        self.image = self.original_image
-        self.rect = self.image.get_rect()
-        self.screen_rect = screen.get_rect()
-        self.radius = int(self.rect.width * .85 / 2)
+        self.surface = pygame.Surface((self.WIDTH, self.HEIGHT), pygame.SRCALPHA)
+        rand_x = random.randint(0, 50)
+        rand_y = random.randint(0, 50)
+        rand_x1 = random.randint(25, 100)
+        rand_y1 = random.randint(0, 50)
+        rand_x2 = random.randint(50, 100)
+        rand_y2 = random.randint(50, 100)
+        rand_x3 = random.randint(0, 50)
+        rand_y3 = random.randint(50, 100)
+        k = ((rand_x, rand_y), (rand_x1, rand_y1), (rand_x2, rand_y2), (rand_x3, rand_y3))
+        pygame.draw.aalines(self.surface, common.BLACK, True, k)
+        #pygame.draw.aalines(self.surface, common.BLACK, True, ((0, 0), (self.WIDTH, self.HEIGHT / 2), (0, self.HEIGHT), (self.WIDTH * 0.1, self.HEIGHT / 2)))
+        self.velocity = Vector(90, -20)
+        self.position = Vector(300, 400)
+        self.friction = 0.4
+        self.mass = 20
+        self.angle = 50
 
-        self.angle = random.randint(1, 360)
-        self.image = pygame.transform.rotate(self.original_image, self.angle)
+    def draw(self, surface):
+        surface.blit(self.surface, self.position.values)
 
-        self.vx = random.randint(-1, 1)
-        self.vy = random.randint(-1, 1)
+    def update(self, dt):
+        angle = math.radians(self.angle) + math.pi / 2
+        self.velocity += Vector(40 * math.sin(angle), 10 * math.cos(angle)) / self.mass
+        self.position += self.velocity * dt
+        self.velocity -= self.velocity * (self.friction * dt)
 
-    def update(self):
-        self.rect = self.rect.move(self.vx, self.vy)
-
-        if self.rect.x < 0:
-            self.rect.x = 840
-        if self.rect.x > 840:
-            self.rect.x = 0
-        if self.rect.y < 0:
-            self.rect.y = 840
-        if self.rect.y > 840:
-            self.rect.y = 0
-
-    def blitme(self):
-        self.screen.blit(self.image, self.rect)
+        if self.position[0] < 0:
+            self.position = Vector(840, self.position[1])
+        if self.position[0] > 840:
+            self.position = Vector(0, self.position[1])
+        if self.position[1] < 0:
+            self.position = Vector(self.position[0], 840)
+        if self.position[1] > 840:
+            self.position = Vector(self.position[0], 0)

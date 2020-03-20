@@ -2,9 +2,9 @@ import pygame
 from pygame.sprite import Group
 from settings import Settings
 from ship import Ship
+from asteroid import Asteroid
 import game_functions as gf
 
-import common
 
 
 def run_game():
@@ -12,22 +12,23 @@ def run_game():
     ai_settings = Settings()
     screen = pygame.display.set_mode((ai_settings.screen_width, ai_settings.screen_height))
     pygame.display.set_caption('Androids Vector')
-    ship = Ship(ai_settings, screen)
+    ship = Ship()
+    asteroid = Asteroid()
     bullets = Group()
     asteroids = pygame.sprite.Group()
-    gf.create_pound(ai_settings, screen, asteroids)
     running = True
     clock = pygame.time.Clock()
-    objects = [ship]
+    #objects = [ship]
     while True:
         dt = clock.tick(30) / 1000
         gf.check_events(ai_settings, screen, ship, bullets)
         ship.update(0.1)
+        asteroid.update(0.1)
         bullets.update()
-        asteroids.update()
         screen.fill(ai_settings.bg_color)
-        gf.update_screen(ai_settings, screen, ship, asteroids, bullets)
+        #gf.update_screen(ai_settings, screen, ship, asteroids, bullets)
         ship.draw(screen)
+        asteroid.draw(screen)
         pygame.display.flip()
 
 

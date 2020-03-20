@@ -39,17 +39,5 @@ def check_events(ai_settings, screen, ship, bullets):
         elif event.type == pygame.KEYUP:
             check_keyup_events(event, ship)
 
-def update_screen(ai_settings, screen, ship, asteroids, bullets):
-
-    for bullet in bullets.sprites():
-        bullet.draw_bullet()
-        #ship.blitme()
-    asteroids.draw(screen)
 
 
-
-def create_pound(ai_settings, screen, asteroids):
-    """создание нескольких астероидов"""
-    for asteroid_number in range(4):
-        asteroid = Asteroid(ai_settings, screen)
-        asteroids.add(asteroid)
